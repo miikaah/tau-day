@@ -44,13 +44,13 @@ const r2 = r + 20;
 ctx.strokeStyle = "#000";
 ctx.textBaseline = "middle";
 ctx.fillText("0 t", o + r2, o);
-ctx.fillText("1 / 8 t", o + r2 * cos(1 / 8), o - r2 * sin(1 / 8));
-ctx.fillText("2 / 8 t", o - 14 + r2 * cos(1 / 4), o - r2 * sin(1 / 4));
-ctx.fillText("3 / 8 t", o - 30 + r2 * cos(3 / 8), o - r2 * sin(3 / 8));
+ctx.fillText("1 / 8 t", o + r2 * cos(1 / 8), o + r2 * sin(-1 / 8));
+ctx.fillText("2 / 8 t", o - 14 + r2 * cos(1 / 4), o + r2 * sin(-1 / 4));
+ctx.fillText("3 / 8 t", o - 30 + r2 * cos(3 / 8), o + r2 * sin(-3 / 8));
 ctx.fillText("4 / 8 t", o - 30 + r2 * cos(1 / 2), o);
-ctx.fillText("5 / 8 t", o - 30 + r2 * cos(5 / 8), o - r2 * sin(5 / 8));
-ctx.fillText("6 / 8 t", o - 14, o + 4 - r2 * sin(3 / 4));
-ctx.fillText("7 / 8 t", o - r2 * cos(5 / 8), o - r2 * sin(5 / 8));
+ctx.fillText("5 / 8 t", o - 30 + r2 * cos(5 / 8), o + r2 * sin(3 / 8));
+ctx.fillText("6 / 8 t", o - 14, o + 4 + r2 * sin(1 / 4));
+ctx.fillText("7 / 8 t", o + r2 * cos(7 / 8), o + r2 * sin(1 / 8));
 
 // Draw triangle
 ctx.strokeStyle = "#999";
@@ -64,7 +64,7 @@ ctx.stroke();
 ctx.strokeStyle = "#000";
 ctx.beginPath();
 ctx.moveTo(o, o);
-ctx.lineTo(o + r * cos(1 / 8), o - r * sin(1 / 8));
+ctx.lineTo(o + r * cos(1 / 8), o + r * sin(-1 / 8));
 ctx.lineTo(o + r * cos(1 / 8), o);
 ctx.lineTo(o, o);
 ctx.stroke();
