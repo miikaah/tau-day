@@ -81,13 +81,16 @@ function rad(fraction) {
 }
 
 let isDrawing = false;
+let isTauTime = false;
 
 canvas.addEventListener("mousedown", () => {
-  isDrawing = true;
+  if (!isTauTime) {
+    isDrawing = true;
+  }
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (isDrawing) {
+  if (!isTauTime && isDrawing) {
     draw(e.offsetX, e.offsetY);
   }
 });
@@ -111,6 +114,7 @@ async function draw(x2, y2) {
     drawArc(tau);
     tauEl.innerHTML = 1;
     isDrawing = false;
+    isTauTime = true;
 
     let intervalCounter = 1;
     const dotUpdater = () => {
