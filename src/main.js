@@ -219,7 +219,6 @@ function fullscreenCanvasAnimation() {
   canvas.style.transform = null;
   textEl.style.visibility = "hidden";
 
-  ctx.strokeStyle = "#628";
   ctx.lineWidth = 1;
 
   window.requestAnimationFrame(drawVerticalLine);
@@ -244,14 +243,40 @@ function drawVerticalLine() {
   window.requestAnimationFrame(drawVerticalLine);
 }
 
+let dx = window.innerWidth / 2;
+let dx2 = window.innerWidth / 2;
 let offset = 0.01;
 
 function drawPatterns() {
-  if (offset > 1.5) {
-    ctx.lineWidth = 4;
+  if (offset > 1) {
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(dx, 0);
+    ctx.lineTo(dx, h);
+    ctx.stroke();
+    ctx.closePath();
+
+    dx = dx - 8;
+
+    if (dx < r3) {
+      ctx.strokeStyle = "#fff";
+      ctx.beginPath();
+      ctx.moveTo(dx2, 0);
+      ctx.lineTo(dx2, h);
+      ctx.stroke();
+      ctx.closePath();
+
+      dx2 = dx2 + 8;
+    }
+  }
+  if (offset > 1.666) {
+    dx = 0;
+    dx2 = window.innerWidth;
+    ctx.lineWidth = 8;
     window.requestAnimationFrame(drawEntropy);
     return;
   }
+  ctx.strokeStyle = "#628";
   ctx.beginPath();
   ctx.moveTo(ox, oy);
   ctx.lineTo(ox + r3 * sin(1 / 8 - offset), oy + r3 * sin(1 / 8));
@@ -274,11 +299,8 @@ function drawPatterns() {
   window.requestAnimationFrame(drawVerticalLine);
 }
 
-let dx = 0;
-let dx2 = window.innerWidth;
-
 function drawEntropy() {
-  if (dx > w + 4) {
+  if (dx > w + 8) {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#fff";
 
@@ -292,7 +314,7 @@ function drawEntropy() {
   ctx.stroke();
   ctx.closePath();
 
-  dx = dx + 4;
+  dx = dx + 8;
 
   if (dx < r3) {
     ctx.strokeStyle = "#fff";
@@ -302,7 +324,7 @@ function drawEntropy() {
     ctx.stroke();
     ctx.closePath();
 
-    dx2 = dx2 - 4;
+    dx2 = dx2 - 8;
   }
 
   window.requestAnimationFrame(drawEntropy);
