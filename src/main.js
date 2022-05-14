@@ -12,6 +12,7 @@ const cos = (fraction) => Math.cos(rad(fraction));
 const sin = (fraction) => Math.sin(rad(fraction));
 
 const tauEl = document.getElementById("tau");
+const textEl = document.getElementById("text");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -178,11 +179,12 @@ async function wait() {
   return new Promise((resolve) => setTimeout(resolve, 3000));
 }
 
-const maxIterations = 100;
+const maxIterations = 80;
 let counter = 1;
 
 function scaleCanvas() {
   if (counter > maxIterations) {
+    fullscreenCanvasAnimation();
     return;
   }
 
@@ -193,28 +195,133 @@ function scaleCanvas() {
   window.requestAnimationFrame(scaleCanvas);
 }
 
-// const maxIterations = 100;
-// const interval = -1 / maxIterations;
-// let counter = 1;
-//
-// function forArc() {
-//   if (counter > maxIterations) {
-//     return;
-//   }
-//
-//   const currentTau = counter * interval * tau;
-//   tauEl.innerHTML = (-1 * counter * interval).toFixed(2);
-//
-//   ctx.beginPath();
-//   ctx.arc(o, o, r, 0, currentTau, true);
-//   ctx.lineWidth = 3;
-//   ctx.strokeStyle = "#f00";
-//   ctx.stroke();
-//   ctx.closePath();
-//
-//   counter++;
-//
-//   window.requestAnimationFrame(forArc);
-// }
-//
-// window.requestAnimationFrame(forArc);
+let ox;
+let oy;
+let r3;
+let dy;
+let w;
+let h;
+
+function fullscreenCanvasAnimation() {
+  w = window.innerWidth;
+  h = window.innerHeight;
+  r3 = w / 2;
+  ox = w / 2;
+  oy = h / 2;
+  dy = oy;
+
+  canvas.width = w;
+  canvas.height = h;
+  canvas.style.transform = null;
+  textEl.style.visibility = "hidden";
+
+  ctx.strokeStyle = "#628";
+  ctx.lineWidth = 1;
+
+  window.requestAnimationFrame(drawVerticalLine);
+}
+
+function drawVerticalLine() {
+  if (dy < 0) {
+    ctx.lineWidth = 2;
+    window.requestAnimationFrame(drawPatterns);
+    return;
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(ox, dy);
+
+  dy = dy - 10;
+
+  ctx.lineTo(ox, dy);
+  ctx.stroke();
+  ctx.closePath();
+
+  window.requestAnimationFrame(drawVerticalLine);
+}
+
+let offset = 0.01;
+
+function drawPatterns() {
+  if (offset > 1.5) {
+    ctx.lineWidth = 4;
+    window.requestAnimationFrame(drawEntropy);
+    return;
+  }
+  ctx.beginPath();
+  ctx.moveTo(ox, oy);
+  ctx.lineTo(ox + r3 * sin(1 / 8 - offset), oy + r3 * sin(1 / 8));
+  // ctx.lineTo(ox + r3 * sin(2 / 8 - offset), oy + r3 * sin(2 / 8));
+  ctx.lineTo(ox + r3 * sin(3 / 8 - offset), oy + r3 * sin(3 / 8));
+  // ctx.lineTo(ox + r3 * sin(4 / 8 - offset), oy + r3 * sin(4 / 8));
+  ctx.lineTo(ox + r3 * sin(5 / 8 - offset), oy + r3 * sin(-4 / 8));
+  // ctx.lineTo(ox + r3 * sin(6 / 8 - offset), oy + r3 * sin(6 / 8));
+  ctx.lineTo(ox + r3 * sin(7 / 8 - offset), oy + r3 * sin(-2 / 8));
+  // ctx.lineTo(ox + r3 * sin(1 / (3 / 4) - offset), oy + r3 * sin(1 / (3 / 4)));
+  ctx.moveTo(ox, oy);
+  ctx.lineTo(ox + r3 * cos(1 / 4 - offset), oy + r3 * cos(-1 / 4));
+  ctx.lineTo(ox + r3 * cos(1 / 2 - offset), oy + r3 * cos(-1 / 2));
+  ctx.lineTo(ox + r3 * cos(1 / (3 / 4) - offset), oy + r3 * cos(-1 / (3 / 4)));
+  ctx.stroke();
+  ctx.closePath();
+
+  offset = offset + 0.01;
+
+  window.requestAnimationFrame(drawVerticalLine);
+}
+
+let dx = 0;
+let dx2 = window.innerWidth;
+
+function drawEntropy() {
+  if (dx > w + 4) {
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#fff";
+
+    window.requestAnimationFrame(forArc);
+    return;
+  }
+  ctx.strokeStyle = "#000";
+  ctx.beginPath();
+  ctx.moveTo(dx, 0);
+  ctx.lineTo(dx, h);
+  ctx.stroke();
+  ctx.closePath();
+
+  dx = dx + 4;
+
+  if (dx < r3) {
+    ctx.strokeStyle = "#fff";
+    ctx.beginPath();
+    ctx.moveTo(dx2, 0);
+    ctx.lineTo(dx2, h);
+    ctx.stroke();
+    ctx.closePath();
+
+    dx2 = dx2 - 4;
+  }
+
+  window.requestAnimationFrame(drawEntropy);
+}
+
+const maxIterations2 = 100;
+const interval = -1 / maxIterations2;
+let counter2 = 1;
+
+function forArc() {
+  if (counter2 > maxIterations2) {
+    return;
+  }
+
+  const currentTau = counter2 * interval * tau;
+  tauEl.innerHTML = (-1 * counter2 * interval).toFixed(2);
+
+  ctx.beginPath();
+  ctx.arc(ox, oy, r, 0, currentTau, true);
+  ctx.stroke();
+  ctx.closePath();
+
+  counter2++;
+
+  window.requestAnimationFrame(forArc);
+}
